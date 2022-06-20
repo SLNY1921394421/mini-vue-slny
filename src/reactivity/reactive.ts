@@ -2,7 +2,10 @@ import { mutableHandlers, readonlyHandlers } from "./baseHandlers";
 // import { track, trigger } from "./effect";
 
 export function reactive(raw) {
-	return new Proxy(raw, mutableHandlers)
+	// return new Proxy(raw, mutableHandlers)
+
+	return createActiveObject(raw, mutableHandlers);
+
 	// return new Proxy(raw, {
 	// 	// get(target, key) {
 	// 	// 	const res = Reflect.get(target, key);
@@ -25,15 +28,22 @@ export function reactive(raw) {
 };
 
 export function readonly(raw) {
-	return new Proxy(raw, readonlyHandlers)
-	// return new Proxy(raw, {
-	// 	// get(target, key) {
-	// 	// 	const res = Reflect.get(target, key);
-	// 	// 	return res;
-	// 	// },
-	// 	get: createGetter(true),
-	// 	set(target, key, value) {
-	// 		return true
-	// 	}
-	// })
+	// return new Proxy(raw, readonlyHandlers)
+
+	return createActiveObject(raw, readonlyHandlers);
+
+	/**return new Proxy(raw, {
+		// get(target, key) {
+		// 	const res = Reflect.get(target, key);
+		// 	return res;
+		// },
+		get: createGetter(true),
+		set(target, key, value) {
+			return true
+		}
+	})*/
 };
+
+function createActiveObject(raw, baseHandlers) {
+	return new Proxy(raw, baseHandlers);
+}
