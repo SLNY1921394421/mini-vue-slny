@@ -1,6 +1,13 @@
 import { mutableHandlers, readonlyHandlers } from "./baseHandlers";
 // import { track, trigger } from "./effect";
 
+
+export const enum ReactiveFlags {
+	IS_REACTIVE = '__v-isReactive',
+	IS_READONLY = '__v_isReadonly',
+	RAW = '__v-raw',
+}
+
 export function reactive(raw) {
 	// return new Proxy(raw, mutableHandlers)
 
@@ -46,4 +53,13 @@ export function readonly(raw) {
 
 function createActiveObject(raw, baseHandlers) {
 	return new Proxy(raw, baseHandlers);
+}
+
+export function isReactive(value) {
+	return !!value[ReactiveFlags.IS_REACTIVE]
+}
+
+
+export function isReadonly(value) {
+	return !!value[ReactiveFlags.IS_READONLY]
 }
