@@ -1,6 +1,9 @@
 import { extend } from "../shared";
 
-extend
+let reactiveEffect;
+let shouldTrack;
+
+
 class ReactiveEffect {
 	private _fn: any;
 	deps = [];
@@ -10,8 +13,16 @@ class ReactiveEffect {
 		this._fn = fn
 	}
 	run() {
+		if(!this.active) {
+			return this._fn();
+		}
+		shouldTrack = true;
 		reactiveEffect = this
-		return this._fn()
+
+		const result = this._fn()
+		shouldTrack = false
+
+		return result
 	}
 	stop() {
 		// this.deps.forEach((dep: any) => {
@@ -30,10 +41,11 @@ class ReactiveEffect {
 function cleanupEffect(effect) {
 	effect.deps.forEach((dep: any) => {
 		dep.delete(effect)
-	})
+	});
+	effect.deps.length = 0;
 }
 
-let reactiveEffect;
+
 export function effect(fn, options: any = {}) {
 	const _effect = new ReactiveEffect(fn, options.scheduler)
 	// _effect.onStop = options.onStop;
@@ -49,6 +61,7 @@ export function effect(fn, options: any = {}) {
 const targetMap = new Map();
 
 export function track(target, key) {
+	if(!isTracking) return
 	let depsMap = targetMap.get(target)
 	 if(!depsMap) {
 		depsMap = new Map()
@@ -61,10 +74,15 @@ export function track(target, key) {
 		depsMap.set(key, dep)
 	}
 
-	if(!reactiveEffect) return
+	if(dep.has(reactiveEffect)) return;
+
 	dep.add(reactiveEffect)
 	reactiveEffect.deps.push(dep)
 	// const deps = depsMap.get(key)
+}
+
+function isTracking() {
+	return reactiveEffect && shouldTrack !== undefined
 }
 
 // 触发依赖
