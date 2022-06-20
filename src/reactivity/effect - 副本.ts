@@ -61,7 +61,7 @@ export function effect(fn, options: any = {}) {
 const targetMap = new Map();
 
 export function track(target, key) {
-	if(!isTracking()) return
+	if(!isTracking) return
 	let depsMap = targetMap.get(target)
 	 if(!depsMap) {
 		depsMap = new Map()
