@@ -1,4 +1,4 @@
-import { mutableHandlers, readonlyHandlers } from "./baseHandlers";
+import { mutableHandlers, readonlyHandlers, shallowReadonlyHandlers } from "./baseHandlers";
 // import { track, trigger } from "./effect";
 
 
@@ -32,6 +32,9 @@ export function reactive(raw) {
 
 	// 	set: createSetter()
 	// })
+};
+export function shallowReadonly(raw) {
+	return createActiveObject(raw, shallowReadonlyHandlers);
 };
 
 export function readonly(raw) {
