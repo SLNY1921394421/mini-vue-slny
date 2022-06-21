@@ -53,6 +53,7 @@ export function isRef(ref) {
 // 如果参数是一个 ref，则返回内部值，否则返回参数本身
 export function unRef(ref) {
 	return isRef(ref) ? ref.value : ref
+<<<<<<< HEAD
 }
 
 export function proxyRefs(objectWithRefs) {
@@ -68,4 +69,6 @@ export function proxyRefs(objectWithRefs) {
 			}
 		}
 	})
+=======
+>>>>>>> 12fd6c4218904a0590e22e23c305f9910a4dbc9f
 }
