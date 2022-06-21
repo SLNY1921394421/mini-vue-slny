@@ -6,6 +6,7 @@ class refImp {
 	private _value: any;
 	public dep;
 	private _rawValue: any;
+	public __v_isRef = true;
 	constructor(value) {
 		this._rawValue = value
 		this._value = convert(value);
@@ -28,7 +29,7 @@ class refImp {
 
 		// return newValue;
 	}
-}
+};
 
 function convert(value) {
 	return isObject(value) ? reactive(value) : value;
@@ -42,4 +43,29 @@ function trackRefValue(ref) {
 
 export function ref(value) {
 	return new refImp(value);
+};
+
+// 检查值是否为一个 ref 对象
+export function isRef(ref) {
+	return !!ref.__v_isRef;
+}
+
+// 如果参数是一个 ref，则返回内部值，否则返回参数本身
+export function unRef(ref) {
+	return isRef(ref) ? ref.value : ref
+}
+
+export function proxyRefs(objectWithRefs) {
+	return new Proxy(objectWithRefs, {
+		get(target, key) {
+			return unRef(Reflect.get(target, key));
+		},
+		set(target, key, value) {
+			if(isRef(target[key]) && !isRef(value)) {
+				return target[key].value = value
+			} else {
+				return Reflect.set(target, key, value);
+			}
+		}
+	})
 }
