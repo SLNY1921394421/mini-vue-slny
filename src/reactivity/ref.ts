@@ -53,7 +53,7 @@ export function isRef(ref) {
 // 如果参数是一个 ref，则返回内部值，否则返回参数本身
 export function unRef(ref) {
 	return isRef(ref) ? ref.value : ref
-}
+};
 
 export function proxyRefs(objectWithRefs) {
 	return new Proxy(objectWithRefs, {
@@ -68,4 +68,4 @@ export function proxyRefs(objectWithRefs) {
 			}
 		}
 	})
-}
+};
