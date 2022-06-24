@@ -4,7 +4,7 @@ export default {
 		return h("div",
 		{
 			id: "root",
-			class: ["red", "hard"]
+			class: ["red", "blue"]
 		},
 		// 'hello,' + this.msg
 		'hello, mini-vue'
