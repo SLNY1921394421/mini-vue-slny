@@ -4,10 +4,12 @@ export default {
 		return h("div",
 		{
 			id: "root",
-			class: ["red", "hard"]
+			class: ["red", "blue"]
 		},
-		// 'hello,' + this.msg
-		'hello, mini-vue'
+		// string
+		// 'hello, mini-vue'
+		// array
+		[h("p", { class: 'red'}, 'hi'), h("p", { class: "blue" }, "mini-vue")]
 		)
 	},
 	setup() {
