@@ -1,4 +1,5 @@
-export const App = {
+import h from '../lib/guide-mini-vue.esm.js';
+export default {
 	render() {
 		h("div", 'hello,' + this.msg)
 	},
