@@ -1,4 +1,4 @@
-import h from '../lib/guide-mini-vue.esm.js';
+import { h } from '../lib/guide-mini-vue.esm.js';
 export default {
 	render() {
 		h("div", 'hello,' + this.msg)
