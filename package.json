@@ -1,8 +1,8 @@
 {
   "name": "my-vue-practice",
   "version": "1.0.0",
-  "main": "lib/guide-mini-vue.cjs",
-  "module": "lib/guide-mini-vue.esm",
+  "main": "lib/guide-mini-vue.cjs.js",
+  "module": "lib/guide-mini-vue.esm.js",
   "license": "MIT",
   "scripts": {
     "test": "jest",

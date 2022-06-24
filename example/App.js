@@ -1,7 +1,14 @@
 import { h } from '../lib/guide-mini-vue.esm.js';
 export default {
 	render() {
-		h("div", 'hello,' + this.msg)
+		return h("div",
+		{
+			id: "root",
+			class: ["red", "hard"]
+		},
+		// 'hello,' + this.msg
+		'hello, mini-vue'
+		)
 	},
 	setup() {
 		return {
