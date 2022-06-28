@@ -6,7 +6,13 @@ export default {
 		return h("div",
 		{
 			id: "root",
-			class: ["red", "blue"]
+			class: ["red", "blue"],
+			onClick() {
+				console.log('onClick')
+			},
+			onMouseout() {
+				console.log('onmouseout')
+			}
 		},
 		// string
 
@@ -19,7 +25,7 @@ export default {
 	},
 	setup() {
 		return {
-			msg: 'mini-vue3 test'
+			msg: 'mini-vue3'
 		}
 	}
 }
