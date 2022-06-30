@@ -16,6 +16,11 @@ function createGetter(isReadonly = false, shallow = false) {
     }
 
 		const res = Reflect.get(target, key);
+
+		if(!isReadonly) {
+			track(target, key);
+		}
+
 		if(shallow) {
 			return res;
 		}
@@ -25,9 +30,6 @@ function createGetter(isReadonly = false, shallow = false) {
 			return isReadonly ? readonly(res) : reactive(res)
 		}
 
-		if(!isReadonly) {
-			track(target, key);
-		}
 		return res;
 	}
 };
