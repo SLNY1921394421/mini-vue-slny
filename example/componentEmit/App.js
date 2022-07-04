@@ -7,13 +7,29 @@ export default {
 		return
 	},
 	render() {
-		return h("div", {}, [h("div", {}, "app"), h(Foo, {
-			onAdd(a, b) {
-				console.log('onAdd', a, b)
-			},
-			onAddFoo() {
-				console.log('onAddFoo')
-			}
-		})])
+		// emit
+		// const foo = h(Foo, {
+		// 	onAdd(a, b) {
+		// 		console.log('onAdd', a, b)
+		// 	},
+		// 	onAddFoo() {
+		// 		console.log('onAddFoo')
+		// 	}
+		// })
+
+		// slot
+		// const foo = h(Foo, {}, [h('p', {}, '123'), h('p', {}, '456')]);
+		// const foo = h(Foo, {}, h('p', {}, '123'));
+		// const foo = h(Foo, {}, {
+		// 	header: h('p', {}, 'header'),
+		// 	footer: h('p', {}, 'footer')
+		// })
+
+		const foo = h(Foo, {}, {
+			header: ({ age }) => h('p', {}, 'header' + age),
+			footer: () => h('p', {}, 'footer')
+		})
+
+		return h("div", {}, [h("div", {}, "app"), foo])
 	}
 }
