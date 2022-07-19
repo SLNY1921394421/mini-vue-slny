@@ -4,7 +4,7 @@ import { createComponentInstance, setupComponent } from "./component";
 import { Fragment, Text } from "./vnode";
 
 export function render(vnode, container) {
-	patch(vnode, container);
+	patch(vnode, container, null);
 }
 
 /**
@@ -12,12 +12,12 @@ export function render(vnode, container) {
  * @param vnode
  * @param container
  */
-function patch(vnode, container) {
+function patch(vnode, container, parentComponent) {
 	const { shapeFlag, type } = vnode
 
 	switch (type) {
 		case Fragment:
-			processFragment(vnode, container);
+			processFragment(vnode, container, parentComponent);
 			break;
 		case Text:
 			processText(vnode, container);
@@ -25,16 +25,16 @@ function patch(vnode, container) {
 
 		default:
 			if(shapeFlag & ShapeFlags.ELEMENT) {
-				processElement(vnode, container)
+				processElement(vnode, container, parentComponent)
 			} else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
-				processComponent(vnode, container)
+				processComponent(vnode, container, parentComponent)
 			}
 			break;
 	}
 }
 
-function processFragment(vnode: any, container: any) {
-	mountChildren(vnode.children, container);
+function processFragment(vnode: any, container: any, parentComponent) {
+	mountChildren(vnode.children, container, parentComponent);
 }
 
 function processText(vnode: any, container: any) {
@@ -44,12 +44,12 @@ function processText(vnode: any, container: any) {
 }
 
 
-function processComponent(vnode: any, container: any) {
-	mountComponent(vnode, container)
+function processComponent(vnode: any, container: any, parentComponent) {
+	mountComponent(vnode, container, parentComponent)
 }
 
-function mountComponent(initialVNode: any, container) {
-	const instance = createComponentInstance(initialVNode)
+function mountComponent(initialVNode: any, container, parentComponent) {
+	const instance = createComponentInstance(initialVNode, parentComponent)
 	setupComponent(instance)
 	setupRenderEffect(initialVNode, instance, container)
 }
@@ -57,15 +57,15 @@ function mountComponent(initialVNode: any, container) {
 function setupRenderEffect(initialVNode, instance: any, container) {
 	const { proxy } = instance
 	const subTree = instance.render.call(proxy)
-	patch(subTree, container);
+	patch(subTree, container, instance);
 	initialVNode.el = subTree.el;
 }
 
-function processElement(vnode: any, container: any) {
-	mountElement(vnode, container)
+function processElement(vnode: any, container: any, parentComponent) {
+	mountElement(vnode, container, parentComponent)
 }
 
-function mountElement(vnode: any, container: any) {
+function mountElement(vnode: any, container: any, parentComponent) {
 	const el = (vnode.el =  document.createElement(vnode.type));
 	const { children, props, shapeFlag } = vnode;
 	if(shapeFlag & ShapeFlags.TEXT_CHILDREN) {
@@ -74,7 +74,7 @@ function mountElement(vnode: any, container: any) {
 		// children.forEach(v => {
 		// 	patch(v, el);
 		// })
-		mountChildren(children, el)
+		mountChildren(children, el, parentComponent)
 	}
 
 	for (const key in props) {
@@ -95,9 +95,9 @@ function mountElement(vnode: any, container: any) {
 	container.append(el);
 }
 
-function mountChildren(vnode, container) {
+function mountChildren(vnode, container, parentComponent) {
 	vnode.forEach(v => {
-		patch(v, container);
+		patch(v, container, parentComponent);
 	})
 }
 
